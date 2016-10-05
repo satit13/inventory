@@ -23,7 +23,7 @@ func main() {
 
 	//r.GET("/", Hello)
 	r.GET("/items", x.GetItem)
-	//r.POST("/item", InsertItem)
+	r.POST("/item", x.InsertItem)
 
 	// Master data part
 	r.GET("/units", x.GetUnit)
@@ -33,28 +33,4 @@ func main() {
 
 
 
-//func InsertItem(c *gin.Context){
-//	newitem := m.Item{}
-//	c.BindJSON(&newitem)
-//	res := m.Response{}
-//	sql := `insert into item (code,name,unitid,price) values(?,?,?,?)`
-//	_,err := DB.Exec(sql,
-//			newitem.Code,
-//			newitem.Name,
-//			newitem.Unitid,
-//			newitem.Price)
-//	log.Println(err)
-//	res.Code = 200
-//	if err != nil {
-//			res.Code = 200 //not modified
-//			c.String(res.Code, err.Error())
-//		return
-//	} else {
-//		c.JSON(res.Code, gin.H{"status":"SUCCESS"})
-//		return
-//	}
-//
-//
-//	return
-//}
 

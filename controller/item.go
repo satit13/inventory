@@ -20,3 +20,9 @@ func GetItem(c *gin.Context){
 	c.JSON(200, i)
 
 }
+
+func  InsertItem(c *gin.Context){
+	log.Println("controller insert item start")
+	res := m.NewItem(c)
+	c.JSON(res.Code, res)
+}

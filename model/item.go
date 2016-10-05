@@ -6,6 +6,7 @@ import (
 
 	//"github.com/jmoiron/sqlx"
 //	"github.com/jmoiron/sqlx"
+	"github.com/gin-gonic/gin"
 )
 
 type Item struct {
@@ -38,3 +39,41 @@ func GetAllItem() ([]ItemProfile){
 	return items
 }
 
+func NewItem(c *gin.Context) (Response ){
+	log.Println("Begin Model New Item ")
+	newitem := Item{}
+	c.BindJSON(&newitem)
+	dbconn := Connectdb()
+	res := Response{}
+
+
+	sql := `insert into item (code,name,unitid,price) values(?,?,?,?)`
+	_,err := dbconn.Exec(sql,
+		newitem.Code,
+		newitem.Name,
+		newitem.Unitid,
+		newitem.Price)
+	log.Println(err)
+	res.Code = 200
+
+	if err != nil {
+		res.Code = 200 //not modified
+		res.Message = err.Error()
+		c.String(res.Code, err.Error())
+		return res
+	} else {
+
+		res.Message = "SUCCESS"
+		return  res
+	}
+
+}
+
+//func InsertItem(c *gin.Context){
+
+
+
+
+
+
+//}
