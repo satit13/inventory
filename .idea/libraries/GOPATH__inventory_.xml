@@ -38,6 +38,7 @@
       <root url="file://$PROJECT_DIR$/../../pborman/uuid/.git" />
       <root url="file://$PROJECT_DIR$/../../../gopkg.in/yaml.v2/.git" />
       <root url="file://$PROJECT_DIR$/../../lib/pq/.git" />
+      <root url="file://$PROJECT_DIR$/../workshopGo/.idea" />
       <root url="file://$PROJECT_DIR$/../../urfave/cli/.git" />
       <root url="file://$PROJECT_DIR$/../../../golang.org/x/net/http2/testdata" />
       <root url="file://$PROJECT_DIR$/../../../paybox-test/.git" />
@@ -78,6 +79,7 @@
       <root url="file://$PROJECT_DIR$/../../../GoTest/.git" />
       <root url="file://$PROJECT_DIR$/../../denisenkom/go-mssqldb/.git" />
       <root url="file://$PROJECT_DIR$/../../golang/geo/.git" />
+      <root url="file://$PROJECT_DIR$/.git" />
       <root url="file://$PROJECT_DIR$/../../pkmngo-odi/pogo-protos/.git" />
       <root url="file://$PROJECT_DIR$/../../pogo/.idea" />
       <root url="file://$PROJECT_DIR$/../../gorm/.idea" />
