@@ -31,7 +31,8 @@ func main() {
 	r.GET("/locations", x.GetLocation)
 	//r.POST("/users/login", UserLogin)
 	b :=m.Buy{}
-	log.Println(b.New(" satit chomwattana"))
+	b.DocNo = "iHV8887766"
+	log.Println(b.New(b))
 	r.Run(":9000")
 
 

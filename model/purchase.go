@@ -12,8 +12,8 @@ type Buy struct {
 	TotalAmount float32
 }
 
-func(b *Buy)New(s string)(string){
-	return "SUCCESS :"+s
+func(b *Buy)New(data Buy)(string){
+	return data.DocNo
 }
 
 
