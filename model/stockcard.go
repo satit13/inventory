@@ -1,6 +1,8 @@
 package model
 
 type StockCard struct {
+	Id int
+	DocType int
 	DocId int
 	ItemId int
 	Qty float32
