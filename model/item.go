@@ -10,6 +10,7 @@ import (
 )
 
 type Item struct {
+	Id int
 	Code string
 	Name string
 	Unitid int
@@ -24,6 +25,7 @@ type ItemProfile struct {
 	Stockqty float32 `json:"stockqty"`
 	Amount   float32 `json:"amount" `
 	Unitname string `json:unitname `
+	Price float32 `json:price `
 }
 
 
@@ -53,18 +55,46 @@ func NewItem(c *gin.Context) (Response ){
 		newitem.Name,
 		newitem.Unitid,
 		newitem.Price)
-	log.Println(err)
+	//log.Println(err)
 	res.Code = 200
 
 	if err != nil {
-		res.Code = 200 //not modified
 		res.Message = err.Error()
-		c.String(res.Code, err.Error())
+		//c.String(res.Code, err.Error())
 		return res
 	} else {
 
 		res.Message = "SUCCESS"
 		return  res
 	}
+
+}
+
+
+func (i *Item)UpdateItem(c *gin.Context)(Response){
+	log.Println("Begin Model Update Item ")
+	UpdateItem := Item{}
+	c.BindJSON(&UpdateItem)
+	dbconn := Connectdb()
+	res := Response{}
+
+
+	sql := `update item	set code = ?,name = ?,unitid=?,	price=?		where id = ?`
+	log.Println(sql)
+	_,err := dbconn.Exec(sql,UpdateItem.Code,UpdateItem.Name,UpdateItem.Unitid,	UpdateItem.Price,UpdateItem.Id)
+	log.Println("Update Item ")
+	log.Println(UpdateItem.Code)
+	res.Code = 200
+
+	if err != nil {
+		res.Message = err.Error()
+		//c.String(res.Code, err.Error())
+		return res
+	} else {
+
+		res.Message = "SUCCESS"
+		return  res
+	}
+
 
 }

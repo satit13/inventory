@@ -25,8 +25,10 @@ func main() {
 	//r.GET("/", Hello)
 	r.GET("/items", x.GetItem)
 	r.POST("/item", x.InsertItem)
+	r.PUT("/item", x.UpdateItem)
 
-	// Master data part
+
+	// Environment Master data part
 	r.GET("/units", x.GetUnit)
 	r.GET("/locations", x.GetLocation)
 	//r.POST("/users/login", UserLogin)
