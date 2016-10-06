@@ -1,4 +1,5 @@
 package model
+//import "log"
 
 type Buy struct {
 	Id int
@@ -10,4 +11,10 @@ type Buy struct {
 	TaxAmount float32
 	TotalAmount float32
 }
+
+func(b *Buy)New(s string)(string){
+	return "SUCCESS :"+s
+}
+
+
 
