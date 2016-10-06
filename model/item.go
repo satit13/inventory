@@ -68,12 +68,3 @@ func NewItem(c *gin.Context) (Response ){
 	}
 
 }
-
-//func InsertItem(c *gin.Context){
-
-
-
-
-
-
-//}

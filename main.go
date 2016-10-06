@@ -27,6 +27,7 @@ func main() {
 
 	// Master data part
 	r.GET("/units", x.GetUnit)
+	r.GET("/locations", x.GetLocation)
 	//r.POST("/users/login", UserLogin)
 	r.Run(":9000")
 }
