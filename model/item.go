@@ -29,7 +29,7 @@ type ItemProfile struct {
 }
 
 
-func GetAllItem() ([]ItemProfile){
+func (i *Item)GetAllItem() ([]ItemProfile){
 
 	items :=  []ItemProfile{}
 	dbconn := Connectdb()
@@ -41,7 +41,7 @@ func GetAllItem() ([]ItemProfile){
 	return items
 }
 
-func NewItem(c *gin.Context) (Response ){
+func (i *Item)NewItem(c *gin.Context) (Response ){
 	log.Println("Begin Model New Item ")
 	newitem := Item{}
 	c.BindJSON(&newitem)

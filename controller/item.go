@@ -15,7 +15,8 @@ func GetItem(c *gin.Context){
 
 	//c.JSON(200, gin.H{"Message":"SUCCESS"})
 	log.Println("controller getitem start")
-	i = m.GetAllItem()
+	item := m.Item{}
+	i = item.GetAllItem()
 	log.Println(i)
 	c.JSON(200, i)
 
@@ -23,7 +24,8 @@ func GetItem(c *gin.Context){
 
 func  InsertItem(c *gin.Context){
 	log.Println("controller insert item start")
-	res := m.NewItem(c)
+	i := m.Item{}
+	res := i.NewItem(c)
 	c.JSON(200, res)
 }
 

@@ -10,7 +10,7 @@ type Location struct {
 }
 
 
-func GetAllLocation()([]Location) {
+func (l *Location)GetAllLocation()([]Location) {
 	lc := []Location{}
 	db := Connectdb()
 	sql := `SELECT * FROM location`

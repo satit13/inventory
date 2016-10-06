@@ -5,7 +5,7 @@ type Unit struct {
 }
 
 
-func GetAllUnit()([]Unit){
+func(u *Unit) GetAllUnit()([]Unit){
 
 	dbconn := Connectdb()
 	units := []Unit{}

@@ -9,8 +9,8 @@ import (
 
 
 func GetUnit(c *gin.Context){
-
-	units := m.GetAllUnit()
+	u := m.Unit{}
+	units := u.GetAllUnit()
 
 
 	c.JSON(200, units)
