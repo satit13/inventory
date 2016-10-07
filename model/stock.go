@@ -15,7 +15,7 @@ type Stock struct {
 }
 
 func(i *Stock)UpdateStock(itemid int64,locid int64,amount float32,doctype Doctype,qty float32,dbconn *sqlx.DB){
-	log.Println("Begin Stockcard.Update process")
+	log.Println("< ------ Begin Stockcard.Update process")
 
 	//check existing record
 	var sql string
