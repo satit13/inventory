@@ -19,12 +19,15 @@ func(i *Stock)UpdateStock(itemid int64,locid int64,amount float32,doctype Doctyp
 
 	//check existing record
 	var sql string
-		sql = `select *  from stock where itemid=? and locationid = ?`
+		sql = `select *  from stock where itemid=? and locationid = ? `
 		log.Println(sql)
 		st := []Stock{}
+
+
 		dbconn.Select(&st, sql,	itemid,	locid,)
 
-		log.Printf("Check Existing Data : %v Record",len(st))
+		log.Printf("Check Existing Data : %v Record ",len(st))
+		//log.Printf("Exists data id : %v",st[1].Id)
 	if len(st) <= 0 {
 
 		sql = `insert into stock (itemid,locationid) values (?,?)`
@@ -34,9 +37,7 @@ func(i *Stock)UpdateStock(itemid int64,locid int64,amount float32,doctype Doctyp
 			println("Exec err:", err.Error())
 		}
 	}
-
 		sql = `update stock set qty = qty+?,amount = amount+?  where itemid=? and locationid = ?`
-
 	log.Println(sql)
 	_,err := dbconn.Exec(sql,
 		qty,

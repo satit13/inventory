@@ -23,27 +23,23 @@ type BuyTrans struct {
 	Item []StockCard
 }
 
-func(b *BuyTrans)New(trx BuyTrans )(Response){
+func(b *BuyTrans)New()(Response){
 	log.Println("Model Purchase New Start")
 	r := Response{}
 	r.Code = 200
 	r.Message = "SUCCESS"
 
-
-	t :=trx
-
 	dbconn := Connectdb()
-
 
 	sql := `insert into buy (docno,docdate,vendorid,sumofitemamount,beforetaxamount,taxamount,totalamount) values(?,?,?,?,?,?,?)`
 	x,err := dbconn.Exec(sql,
-		t.Doc.DocNo,
-		t.Doc.DocDate,
-		t.Doc.VendorId,
-		t.Doc.SumOfItemAmount,
-		t.Doc.BeforeTaxAmount,
-		t.Doc.TaxAmount,
-		t.Doc.TotalAmount,
+		b.Doc.DocNo,
+		b.Doc.DocDate,
+		b.Doc.VendorId,
+		b.Doc.SumOfItemAmount,
+		b.Doc.BeforeTaxAmount,
+		b.Doc.TaxAmount,
+		b.Doc.TotalAmount,
 		)
 
 	if err != nil {
@@ -52,19 +48,15 @@ func(b *BuyTrans)New(trx BuyTrans )(Response){
 		Id, _ := x.LastInsertId()
 		log.Println("Insert Header of buy success")
 		// Update transaction.Id from last insert
-		t.Doc.Id = Id
+		b.Doc.Id = Id
 		// Todo: Insert Detail of Document
 
-		t.NewDetail(t,dbconn)
+		b.NewDetail(b,dbconn)
 	}
 
 //	Check slice of item detail before insert to database
-
-
-
 	//log.Println(err)
 	r.Code = 200
-
 	if err != nil {
 		r.Message = err.Error()
 		//c.String(res.Code, err.Error())
@@ -73,8 +65,6 @@ func(b *BuyTrans)New(trx BuyTrans )(Response){
 		r.Message = "SUCCESS"
 		return  r
 	}
-
-
 	return r
 }
 
@@ -88,6 +78,8 @@ func(trx *BuyTrans)NewDetail(ts BuyTrans, dbconn *sqlx.DB){
 	for k, _ := range trx.Item {
 		sql := `insert into stockcard (doctype,docid,docdate,qty,price,amount,locationid,unitid,itemid)
 				values (?,?,?,?,?,?,?,?,?	)`
+
+		trx.Item[k].Amount = trx.Item[k].Qty*trx.Item[k].Price
 		log.Println(sql)
 		_,err := dbconn.Exec(sql,
 			docType,
@@ -100,10 +92,9 @@ func(trx *BuyTrans)NewDetail(ts BuyTrans, dbconn *sqlx.DB){
 			trx.Item[k].UnitId,
 			trx.Item[k].ItemId,
 		)
-		if err != nil {
+			if err != nil {
 			println("Exec err:", err.Error())
 		}
-
 		// call update stock
 		stc := Stock{}
 		stc.UpdateStock(trx.Item[k].ItemId,trx.Item[k].LocationId,trx.Item[k].Amount,PURCHASE,trx.Item[k].Qty,dbconn)
