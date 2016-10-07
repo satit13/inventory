@@ -62,8 +62,6 @@ func(b *BuyTrans)New(trx BuyTrans )(Response){
 	}
 
 
-
-
 	return r
 }
 
