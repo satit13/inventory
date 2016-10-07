@@ -80,14 +80,12 @@ func(b *BuyTrans)New(trx BuyTrans )(Response){
 
 
 func(trx *BuyTrans)NewDetail(ts BuyTrans, dbconn *sqlx.DB){
-	// PURCHASE IS Doctype :1
+	// PURCHASE IS Doctype :1  Get data from init.go  constants
 	docType := PURCHASE
 
 	log.Println("Start Buytrans.NewDetail insert ")
 	log.Println(ts.Doc)
-
 	for k, _ := range trx.Item {
-
 		sql := `insert into stockcard (doctype,docid,docdate,qty,price,amount,locationid,unitid,itemid)
 				values (?,?,?,?,?,?,?,?,?	)`
 		log.Println(sql)
@@ -105,6 +103,10 @@ func(trx *BuyTrans)NewDetail(ts BuyTrans, dbconn *sqlx.DB){
 		if err != nil {
 			println("Exec err:", err.Error())
 		}
-	}
 
+		// call update stock
+		stc := Stock{}
+		stc.UpdateStock(trx.Item[k].ItemId,trx.Item[k].LocationId,trx.Item[k].Amount,PURCHASE,trx.Item[k].Qty,dbconn)
+
+	}
 }

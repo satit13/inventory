@@ -1,12 +1,13 @@
 package model
+//import "log"
 
 type StockCard struct {
 	Id int
-	DocType int
-	DocId int
-	ItemId int
+	DocType int64
+	DocId int64
+	ItemId int64
 	Qty float32
-	LocationId float32
+	LocationId int64
 	Price float32
 	UnitId float32
 	NetAmount float32
@@ -14,3 +15,5 @@ type StockCard struct {
 	Amount float32
 	Iscancel int
 }
+
+
