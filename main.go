@@ -21,7 +21,7 @@ func main() {
 	// Buy transaction
 	// todo: is coding ... Not completed ...
 
-	r.POST("/buy" , x.NewBuy)
+	r.POST("/buy", x.NewBuy)
 
 	// Environment Master data part
 	r.GET("/units", x.GetUnit)

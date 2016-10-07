@@ -1,20 +1,20 @@
 package model
 import (
-	//"github.com/gin-gonic/gin"
+//"github.com/gin-gonic/gin"
 	"log"
-	//"github.com/jmoiron/sqlx"
+//"github.com/jmoiron/sqlx"
 
-	//"github.com/jmoiron/sqlx"
+//"github.com/jmoiron/sqlx"
 //	"github.com/jmoiron/sqlx"
 	"github.com/gin-gonic/gin"
 )
 
 type Item struct {
-	Id int
-	Code string
-	Name string
+	Id     int
+	Code   string
+	Name   string
 	Unitid int
-	Price float32
+	Price  float32
 }
 
 
@@ -25,13 +25,13 @@ type ItemProfile struct {
 	Stockqty float32 `json:"stockqty"`
 	Amount   float32 `json:"amount" `
 	Unitname string `json:unitname `
-	Price float32 `json:price `
+	Price    float32 `json:price `
 }
 
 
-func (i *Item)GetAllItem() ([]ItemProfile){
+func (i *Item)GetAllItem() ([]ItemProfile) {
 
-	items :=  []ItemProfile{}
+	items := []ItemProfile{}
 	dbconn := Connectdb()
 	log.Println("begin model.Getallitem")
 	sql := `SELECT * FROM itemProfile  `
@@ -41,7 +41,7 @@ func (i *Item)GetAllItem() ([]ItemProfile){
 	return items
 }
 
-func (i *Item)NewItem(c *gin.Context) (Response ){
+func (i *Item)NewItem(c *gin.Context) (Response) {
 	log.Println("Begin Model New Item ")
 	newitem := Item{}
 	c.BindJSON(&newitem)
@@ -50,7 +50,7 @@ func (i *Item)NewItem(c *gin.Context) (Response ){
 
 
 	sql := `insert into item (code,name,unitid,price) values(?,?,?,?)`
-	_,err := dbconn.Exec(sql,
+	_, err := dbconn.Exec(sql,
 		newitem.Code,
 		newitem.Name,
 		newitem.Unitid,
@@ -65,13 +65,13 @@ func (i *Item)NewItem(c *gin.Context) (Response ){
 	} else {
 
 		res.Message = "SUCCESS"
-		return  res
+		return res
 	}
 
 }
 
 
-func (i *Item)UpdateItem(c *gin.Context)(Response){
+func (i *Item)UpdateItem(c *gin.Context) (Response) {
 	log.Println("Begin Model Update Item ")
 	UpdateItem := Item{}
 	c.BindJSON(&UpdateItem)
@@ -81,7 +81,7 @@ func (i *Item)UpdateItem(c *gin.Context)(Response){
 
 	sql := `update item	set code = ?,name = ?,unitid=?,	price=?		where id = ?`
 	log.Println(sql)
-	_,err := dbconn.Exec(sql,UpdateItem.Code,UpdateItem.Name,UpdateItem.Unitid,	UpdateItem.Price,UpdateItem.Id)
+	_, err := dbconn.Exec(sql, UpdateItem.Code, UpdateItem.Name, UpdateItem.Unitid, UpdateItem.Price, UpdateItem.Id)
 	log.Println("Update Item ")
 	log.Println(UpdateItem.Code)
 	res.Code = 200
@@ -93,7 +93,7 @@ func (i *Item)UpdateItem(c *gin.Context)(Response){
 	} else {
 
 		res.Message = "SUCCESS"
-		return  res
+		return res
 	}
 
 

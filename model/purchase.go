@@ -8,22 +8,22 @@ import
 //import "log"
 
 type Buy struct {
-	Id int64
-	DocNo string
-	DocDate string
-	VendorId int
+	Id              int64
+	DocNo           string
+	DocDate         string
+	VendorId        int
 	SumOfItemAmount float32
 	BeforeTaxAmount float32
-	TaxAmount float32
-	TotalAmount float32
+	TaxAmount       float32
+	TotalAmount     float32
 }
 
 type BuyTrans struct {
-	Doc Buy
+	Doc  Buy
 	Item []StockCard
 }
 
-func(b *BuyTrans)New()(Response){
+func (b *BuyTrans)New() (Response) {
 	log.Println("Model Purchase New Start")
 	r := Response{}
 	r.Code = 200
@@ -32,7 +32,7 @@ func(b *BuyTrans)New()(Response){
 	dbconn := Connectdb()
 
 	sql := `insert into buy (docno,docdate,vendorid,sumofitemamount,beforetaxamount,taxamount,totalamount) values(?,?,?,?,?,?,?)`
-	x,err := dbconn.Exec(sql,
+	x, err := dbconn.Exec(sql,
 		b.Doc.DocNo,
 		b.Doc.DocDate,
 		b.Doc.VendorId,
@@ -40,7 +40,7 @@ func(b *BuyTrans)New()(Response){
 		b.Doc.BeforeTaxAmount,
 		b.Doc.TaxAmount,
 		b.Doc.TotalAmount,
-		)
+	)
 
 	if err != nil {
 		println("Exec err:", err.Error())
@@ -51,10 +51,10 @@ func(b *BuyTrans)New()(Response){
 		b.Doc.Id = Id
 		// Todo: Insert Detail of Document
 
-		b.NewDetail(b,dbconn)
+		b.NewDetail(b, dbconn)
 	}
 
-//	Check slice of item detail before insert to database
+	//	Check slice of item detail before insert to database
 	//log.Println(err)
 	r.Code = 200
 	if err != nil {
@@ -63,13 +63,13 @@ func(b *BuyTrans)New()(Response){
 		return r
 	} else {
 		r.Message = "SUCCESS"
-		return  r
+		return r
 	}
 	return r
 }
 
 
-func(trx *BuyTrans)NewDetail(ts BuyTrans, dbconn *sqlx.DB){
+func (trx *BuyTrans)NewDetail(ts BuyTrans, dbconn *sqlx.DB) {
 	// PURCHASE IS Doctype :1  Get data from init.go  constants
 	docType := PURCHASE
 
@@ -79,9 +79,9 @@ func(trx *BuyTrans)NewDetail(ts BuyTrans, dbconn *sqlx.DB){
 		sql := `insert into stockcard (doctype,docid,docdate,qty,price,amount,locationid,unitid,itemid)
 				values (?,?,?,?,?,?,?,?,?	)`
 
-		trx.Item[k].Amount = trx.Item[k].Qty*trx.Item[k].Price
+		trx.Item[k].Amount = trx.Item[k].Qty * trx.Item[k].Price
 		log.Println(sql)
-		_,err := dbconn.Exec(sql,
+		_, err := dbconn.Exec(sql,
 			docType,
 			ts.Doc.Id,
 			ts.Doc.DocDate,
@@ -92,12 +92,12 @@ func(trx *BuyTrans)NewDetail(ts BuyTrans, dbconn *sqlx.DB){
 			trx.Item[k].UnitId,
 			trx.Item[k].ItemId,
 		)
-			if err != nil {
+		if err != nil {
 			println("Exec err:", err.Error())
 		}
 		// call update stock
 		stc := Stock{}
-		stc.UpdateStock(trx.Item[k].ItemId,trx.Item[k].LocationId,trx.Item[k].Amount,PURCHASE,trx.Item[k].Qty,dbconn)
+		stc.UpdateStock(trx.Item[k].ItemId, trx.Item[k].LocationId, trx.Item[k].Amount, PURCHASE, trx.Item[k].Qty, dbconn)
 
 	}
 }
