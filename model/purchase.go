@@ -1,10 +1,14 @@
 package model
-import "log"
+import
+(
+	"log"
+	"github.com/jmoiron/sqlx"
+)
 //import "github.com/gin-gonic/gin"
 //import "log"
 
 type Buy struct {
-	Id int
+	Id int64
 	DocNo string
 	DocDate string
 	VendorId int
@@ -26,28 +30,37 @@ func(b *BuyTrans)New(trx BuyTrans )(Response){
 	r.Message = "SUCCESS"
 
 
+	t :=trx
+
 	dbconn := Connectdb()
 
 
 	sql := `insert into buy (docno,docdate,vendorid,sumofitemamount,beforetaxamount,taxamount,totalamount) values(?,?,?,?,?,?,?)`
-	_,err := dbconn.Exec(sql,
-		trx.Doc.DocNo,
-		trx.Doc.DocDate,
-		trx.Doc.VendorId,
-		trx.Doc.SumOfItemAmount,
-		trx.Doc.BeforeTaxAmount,
-		trx.Doc.TaxAmount,
-		trx.Doc.TotalAmount,
+	x,err := dbconn.Exec(sql,
+		t.Doc.DocNo,
+		t.Doc.DocDate,
+		t.Doc.VendorId,
+		t.Doc.SumOfItemAmount,
+		t.Doc.BeforeTaxAmount,
+		t.Doc.TaxAmount,
+		t.Doc.TotalAmount,
 		)
-	log.Println(sql)
+
+	if err != nil {
+		println("Exec err:", err.Error())
+	} else {
+		Id, _ := x.LastInsertId()
+		log.Println("Insert Header of buy success")
+		// Update transaction.Id from last insert
+		t.Doc.Id = Id
+		// Todo: Insert Detail of Document
+
+		t.NewDetail(t,dbconn)
+	}
 
 //	Check slice of item detail before insert to database
-	for k, _ := range trx.Item {
-		log.Println(trx.Item[k].ItemId)
-		log.Println(trx.Item[k].Qty)
-		log.Println(trx.Item[k].Price)
-		log.Println("--Next Item--")
-	}
+
+
 
 	//log.Println(err)
 	r.Code = 200
@@ -66,4 +79,32 @@ func(b *BuyTrans)New(trx BuyTrans )(Response){
 }
 
 
+func(trx *BuyTrans)NewDetail(ts BuyTrans, dbconn *sqlx.DB){
+	// PURCHASE IS Doctype :1
+	docType := PURCHASE
 
+	log.Println("Start Buytrans.NewDetail insert ")
+	log.Println(ts.Doc)
+
+	for k, _ := range trx.Item {
+
+		sql := `insert into stockcard (doctype,docid,docdate,qty,price,amount,locationid,unitid,itemid)
+				values (?,?,?,?,?,?,?,?,?	)`
+		log.Println(sql)
+		_,err := dbconn.Exec(sql,
+			docType,
+			ts.Doc.Id,
+			ts.Doc.DocDate,
+			trx.Item[k].Qty,
+			trx.Item[k].Price,
+			trx.Item[k].Amount,
+			trx.Item[k].LocationId,
+			trx.Item[k].UnitId,
+			trx.Item[k].ItemId,
+		)
+		if err != nil {
+			println("Exec err:", err.Error())
+		}
+	}
+
+}
