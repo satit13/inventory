@@ -2,12 +2,14 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
-
+	m "github.com/mrtomyum/inventory/model"
 	x "github.com/mrtomyum/inventory/controller"
 )
 
 
 func main() {
+
+	m.TestConnectMsSql()
 
 
 	r := gin.New()
