@@ -33,5 +33,6 @@ func UpdateItem(c *gin.Context){
 	log.Println("Controller Update Item Start")
 	i := m.Item{}
 	res := i.UpdateItem(c)
+
 	c.JSON(200,res)
 }

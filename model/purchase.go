@@ -51,7 +51,7 @@ func (b *BuyTrans)New() (Response) {
 		b.Doc.Id = Id
 		// Todo: Insert Detail of Document
 
-		b.NewDetail(b, dbconn)
+		b.NewDetail(dbconn)
 	}
 
 	//	Check slice of item detail before insert to database
@@ -69,35 +69,35 @@ func (b *BuyTrans)New() (Response) {
 }
 
 
-func (trx *BuyTrans)NewDetail(ts BuyTrans, dbconn *sqlx.DB) {
+func (b *BuyTrans)NewDetail( dbconn *sqlx.DB) {
 	// PURCHASE IS Doctype :1  Get data from init.go  constants
 	docType := PURCHASE
 
 	log.Println("Start Buytrans.NewDetail insert ")
-	log.Println(ts.Doc)
-	for k, _ := range trx.Item {
+	log.Println(b.Doc)
+	for k, _ := range b.Item {
 		sql := `insert into stockcard (doctype,docid,docdate,qty,price,amount,locationid,unitid,itemid)
 				values (?,?,?,?,?,?,?,?,?	)`
 
-		trx.Item[k].Amount = trx.Item[k].Qty * trx.Item[k].Price
+		b.Item[k].Amount = b.Item[k].Qty * b.Item[k].Price
 		log.Println(sql)
 		_, err := dbconn.Exec(sql,
 			docType,
-			ts.Doc.Id,
-			ts.Doc.DocDate,
-			trx.Item[k].Qty,
-			trx.Item[k].Price,
-			trx.Item[k].Amount,
-			trx.Item[k].LocationId,
-			trx.Item[k].UnitId,
-			trx.Item[k].ItemId,
+			b.Doc.Id,
+			b.Doc.DocDate,
+			b.Item[k].Qty,
+			b.Item[k].Price,
+			b.Item[k].Amount,
+			b.Item[k].LocationId,
+			b.Item[k].UnitId,
+			b.Item[k].ItemId,
 		)
 		if err != nil {
 			println("Exec err:", err.Error())
 		}
 		// call update stock
 		stc := Stock{}
-		stc.UpdateStock(trx.Item[k].ItemId, trx.Item[k].LocationId, trx.Item[k].Amount, PURCHASE, trx.Item[k].Qty, dbconn)
+		stc.UpdateStock(b.Item[k].ItemId, b.Item[k].LocationId, b.Item[k].Amount, PURCHASE, b.Item[k].Qty, dbconn)
 
 	}
 }

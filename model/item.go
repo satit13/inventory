@@ -95,6 +95,4 @@ func (i *Item)UpdateItem(c *gin.Context) (Response) {
 		res.Message = "SUCCESS"
 		return res
 	}
-
-
 }

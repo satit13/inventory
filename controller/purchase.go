@@ -27,7 +27,7 @@ func NewBuy(c *gin.Context) {
 
 	// call model.purchase.newbuy
 
-	result = b.New(b)
+	result = b.New()
 	log.Println(result)
 	c.JSON(200, result)
 }
