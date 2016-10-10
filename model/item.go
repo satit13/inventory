@@ -41,6 +41,20 @@ func (i *Item)GetAllItem() ([]ItemProfile) {
 	return items
 }
 
+
+func (i *Item)GetItem(search_id int)(ItemProfile){
+	item := ItemProfile{}
+	dbconn := Connectdb()
+	log.Println("begin model.Get-item-by-id")
+	sql := `SELECT * FROM itemProfile where id = ? `
+	log.Println(sql)
+	dbconn.Get(&item, sql,search_id)
+	log.Println(item)
+	//c.JSON(200, items)
+	return item
+}
+
+
 func (i *Item)NewItem(c *gin.Context) (Response) {
 	log.Println("Begin Model New Item ")
 	newitem := Item{}

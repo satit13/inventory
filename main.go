@@ -14,9 +14,13 @@ func main() {
 
 	r := gin.New()
 	//r.GET("/", Hello)
-	r.GET("/items", x.GetItem)
+	r.GET("/items", x.GetAllItem)
+	r.GET("/item/:id" ,x.GetItem)
+
 	r.POST("/item", x.InsertItem)
 	r.PUT("/item", x.UpdateItem)
+
+
 
 	// Buy transaction
 	// todo: is coding ... Not completed ...

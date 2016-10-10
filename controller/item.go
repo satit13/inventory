@@ -4,23 +4,52 @@ import (
 		m "github.com/mrtomyum/inventory/model"
 		"github.com/gin-gonic/gin"
 		//"github.com/jmoiron/sqlx"
-
+	"regexp"
+	"strconv"
 	"log"
 )
-
+var leadingInt = regexp.MustCompile(`^[-+]?\d+`)
 var i []m.ItemProfile
 
+func ParseLeadingInt(s string) (int64, error) {
+	s = leadingInt.FindString(s)
+	if s == "" { // add this if you don't want error on "xx" etc
+		return 0, nil
+	}
+	return strconv.ParseInt(s, 10, 64)
+}
 
-func GetItem(c *gin.Context){
+
+func GetAllItem(c *gin.Context){
 
 	//c.JSON(200, gin.H{"Message":"SUCCESS"})
-	log.Println("controller getitem start")
+	log.Println("controller get-All-Item start")
 	item := m.Item{}
 	i = item.GetAllItem()
 	log.Println(i)
 	c.JSON(200, i)
 
 }
+
+func GetItem(c *gin.Context){
+	search_id := c.Params.ByName("id")
+
+	//c.JSON(200, gin.H{"Message":"SUCCESS"})
+	log.Println("controller Getitem start")
+	x := c.Params.ByName("id")
+
+	item := m.Item{}
+	//y :=	strconv.ParseInt(x, 10, 64)
+
+	log.Printf("Search Item by id : %v",search_id)
+
+	y, _ := strconv.Atoi(x)
+	i := item.GetItem(y)
+
+	c.JSON(200, i)
+
+}
+
 
 func  InsertItem(c *gin.Context){
 	log.Println("controller insert item start")
