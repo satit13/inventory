@@ -12,6 +12,33 @@ type Stock struct {
 	Averagecost float32
 }
 
+type Stockprofile struct {
+	Id int64
+	ItemId int64
+	LocationId int64
+	Qty float32
+	Itemname string
+	Locationname string
+
+}
+
+
+func (i *Stockprofile)GetAllStock()([]Stockprofile){
+
+	log.Println("Begin Model.Stockprofile.GetAllStock")
+	dbconn := Connectdb()
+	rs := []Stockprofile{}
+
+	sql := `select id,itemid,locationid,qty,itemname,locationname from StockProfile `
+	log.Printf(sql)
+	log.Println("---------------")
+	error := dbconn.Select(&rs, sql)
+	if error != nil {
+		log.Println(error)
+	}
+	return rs
+}
+
 func (i *Stock)UpdateStock(itemid int64, locid int64, amount float32, doctype Doctype, qty float32, dbconn *sqlx.DB) {
 	log.Println("< ------ Begin Stockcard.Update process")
 
@@ -20,7 +47,6 @@ func (i *Stock)UpdateStock(itemid int64, locid int64, amount float32, doctype Do
 	sql = `select *  from stock where itemid=? and locationid = ? `
 	log.Println(sql)
 	st := []Stock{}
-
 
 	dbconn.Select(&st, sql, itemid, locid, )
 

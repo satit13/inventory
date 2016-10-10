@@ -26,7 +26,9 @@ func main() {
 	// Environment Master data part
 	r.GET("/units", x.GetUnit)
 	r.GET("/locations", x.GetLocation)
+	r.GET("/stocks",x.GetAllStock)
 	//r.POST("/users/login", UserLogin)
+
 
 	r.Run(":9000")
 

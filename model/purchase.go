@@ -101,3 +101,23 @@ func (b *BuyTrans)NewDetail( dbconn *sqlx.DB) {
 
 	}
 }
+
+//
+//func (b *BuyTrans)DeleteBuy()(Response){
+//	log.Println("Model Purchase Delete Start")
+//	r := Response{}
+//	r.Code = 200
+//	r.Message = "SUCCESS"
+//
+//	dbconn := Connectdb()
+//
+//	sql := `Update buy set iscancel=1 where docid = ?`
+//	_, err := dbconn.Exec(sql,b.Doc.Id)
+//	if err != nil {
+//		println("Exec err:", err.Error())
+//		r.Message=(err)
+//
+//	}
+//
+//	return r
+//}
