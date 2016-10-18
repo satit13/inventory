@@ -36,6 +36,7 @@ func (i *Item)GetAllItem() ([]ItemProfile) {
 	log.Println("begin model.Getallitem")
 	sql := `SELECT * FROM itemProfile  `
 	dbconn.Select(&items, sql)
+
 	log.Println(items)
 	//c.JSON(200, items)
 	return items
@@ -44,13 +45,18 @@ func (i *Item)GetAllItem() ([]ItemProfile) {
 
 func (i *Item)GetItem(search_id int)(ItemProfile){
 	item := ItemProfile{}
+
 	dbconn := Connectdb()
 	log.Println("begin model.Get-item-by-id")
 	sql := `SELECT * FROM itemProfile where id = ? `
 	log.Println(sql)
 	dbconn.Get(&item, sql,search_id)
+
+
+	log.Printf("item.Code length : %v ",len(item.Code))
+
 	log.Println(item)
-	//c.JSON(200, items)
+	//c.JSON(200, items)f
 	return item
 }
 

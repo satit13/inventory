@@ -18,6 +18,10 @@ type Buy struct {
 	TotalAmount     float32
 }
 
+type row struct {
+	Col string
+	Item string
+}
 type BuyTrans struct {
 	Doc  Buy
 	Item []StockCard
@@ -28,7 +32,6 @@ func (b *BuyTrans)New() (Response) {
 	r := Response{}
 	r.Code = 200
 	r.Message = "SUCCESS"
-
 	dbconn := Connectdb()
 
 	sql := `insert into buy (docno,docdate,vendorid,sumofitemamount,beforetaxamount,taxamount,totalamount) values(?,?,?,?,?,?,?)`

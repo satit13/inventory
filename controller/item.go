@@ -11,16 +11,10 @@ import (
 var leadingInt = regexp.MustCompile(`^[-+]?\d+`)
 var i []m.ItemProfile
 
-func ParseLeadingInt(s string) (int64, error) {
-	s = leadingInt.FindString(s)
-	if s == "" { // add this if you don't want error on "xx" etc
-		return 0, nil
-	}
-	return strconv.ParseInt(s, 10, 64)
-}
 
 
 func GetAllItem(c *gin.Context){
+
 
 	//c.JSON(200, gin.H{"Message":"SUCCESS"})
 	log.Println("controller get-All-Item start")
@@ -30,6 +24,7 @@ func GetAllItem(c *gin.Context){
 	c.JSON(200, i)
 
 }
+
 
 func GetItem(c *gin.Context){
 	search_id := c.Params.ByName("id")
@@ -42,10 +37,9 @@ func GetItem(c *gin.Context){
 	//y :=	strconv.ParseInt(x, 10, 64)
 
 	log.Printf("Search Item by id : %v",search_id)
-
+	// convert to int parameter to Y variable
 	y, _ := strconv.Atoi(x)
 	i := item.GetItem(y)
-
 	c.JSON(200, i)
 
 }
@@ -62,6 +56,5 @@ func UpdateItem(c *gin.Context){
 	log.Println("Controller Update Item Start")
 	i := m.Item{}
 	res := i.UpdateItem(c)
-
 	c.JSON(200,res)
 }

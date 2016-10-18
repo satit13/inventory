@@ -7,9 +7,9 @@ import "fmt"
 import "flag"
 
 var debug = flag.Bool("debug", false, "enable debugging")
-var password = flag.String("password", "svy@2015", "the database password")
+var password = flag.String("password", "[ibdkifu", "the database password")
 var port *int = flag.Int("port", 1433, "the database port")
-var server = flag.String("server", "203.146.170.133", "the database server")
+var server = flag.String("server", "s01", "the database server")
 var user = flag.String("user", "sa", "the database user")
 
 func TestConnectMsSql() {
@@ -32,7 +32,7 @@ func TestConnectMsSql() {
 	}
 	defer conn.Close()
 
-	stmt, err := conn.Prepare("select top  1 roworder,name1 from svy.dbo.bcap ")
+	stmt, err := conn.Prepare("select top  1 roworder,name1 from pos.dbo.bcar ")
 	if err != nil {
 		log.Fatal("Prepare failed:", err.Error())
 	}
