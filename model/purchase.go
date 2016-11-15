@@ -68,7 +68,7 @@ func (b *BuyTrans)New() (Response) {
 		r.Message = "SUCCESS"
 		return r
 	}
-	return r
+//	return
 }
 
 
@@ -105,7 +105,7 @@ func (b *BuyTrans)NewDetail( dbconn *sqlx.DB) {
 	}
 }
 
-//
+
 //func (b *BuyTrans)DeleteBuy()(Response){
 //	log.Println("Model Purchase Delete Start")
 //	r := Response{}
@@ -114,6 +114,7 @@ func (b *BuyTrans)NewDetail( dbconn *sqlx.DB) {
 //
 //	dbconn := Connectdb()
 //
+//	// Cancel Header of Buy trans
 //	sql := `Update buy set iscancel=1 where docid = ?`
 //	_, err := dbconn.Exec(sql,b.Doc.Id)
 //	if err != nil {
@@ -121,6 +122,22 @@ func (b *BuyTrans)NewDetail( dbconn *sqlx.DB) {
 //		r.Message=(err)
 //
 //	}
+//
+//
+//	// Cancel Detail of Buy item Loop for each item - Decrease Stock (-)
+//	stkcard := []StockCard{}
+//	sql = `select * from stockcard where docid =?`
+//	 err = dbconn.Select(&stkcard,sql,b.Doc.Id)
+//
+//	if err != nil {
+//		println("Exec err:", err.Error())
+//		r.Message=(err)
+//
+//	}
+//
+//	// loop for cancel & Update stock
+//
+//
 //
 //	return r
 //}

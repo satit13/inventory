@@ -2,14 +2,13 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
-	m "github.com/mrtomyum/inventory/model"
+//	m "github.com/mrtomyum/inventory/model"
 	x "github.com/mrtomyum/inventory/controller"
 )
 
 
 func main() {
-
-	m.TestConnectMsSql()
+	//m.TestConnectMsSql()
 
 
 	r := gin.New()
@@ -21,11 +20,11 @@ func main() {
 	r.PUT("/item", x.UpdateItem)
 
 
-
 	// Buy transaction
 	// todo: is coding ... Not completed ...
 
 	r.POST("/buy", x.NewBuy)
+	r.DELETE("/buy", x.DeleteBuy)
 
 	// Environment Master data part
 	r.GET("/units", x.GetUnit)

@@ -61,6 +61,19 @@ func (i *Stock)UpdateStock(itemid int64, locid int64, amount float32, doctype Do
 			println("Exec err:", err.Error())
 		}
 	}
+
+
+	// case PURCHASE
+
+//	switch {
+//	case doctype : PURCHASE:
+//		return c - '0'
+//	case 'a' <= c && c <= 'f':
+//		return c - 'a' + 10
+//	case 'A' <= c && c <= 'F':
+//		return c - 'A' + 10
+//	}
+
 	sql = `update stock set qty = qty+?,amount = amount+?  where itemid=? and locationid = ?`
 	log.Println(sql)
 	_, err := dbconn.Exec(sql,
@@ -68,6 +81,21 @@ func (i *Stock)UpdateStock(itemid int64, locid int64, amount float32, doctype Do
 		amount,
 		itemid,
 		locid,
+	)
+
+	if err != nil {
+		println("Exec err:", err.Error())
+	}
+
+	// update stock in item table
+	sql = `update item set qty = (select sum(qty) from stock where itemid = ?) ,
+			amount = (select sum(amount) from stock where itemid = ?)
+			where id=?;`
+	log.Println(sql)
+	_, err = dbconn.Exec(sql,
+		itemid,
+		itemid,
+		itemid,
 	)
 
 	if err != nil {

@@ -14,7 +14,7 @@ type StockCard struct {
 	TaxAmount  float32
 	Amount     float32
 	Iscancel   int
-	Row 	  []row
+	//Row 	  []row
 }
 
 
