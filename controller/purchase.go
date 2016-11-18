@@ -35,23 +35,27 @@ func NewBuy(c *gin.Context) {
 
 func DeleteBuy(c *gin.Context) {
 	log.Println("Begin Controller  DELETE  Buy Transaction")
-	b := m.BuyTrans{}
-
+	type DeleteDocno struct {
+		Docno   string
+	}
+	var b DeleteDocno
 	c.BindJSON(&b)
-	//	log.Println(b.Doc.DocNo)
-	//	log.Println(b.Doc.DocDate)
-	//	log.Println(b.Doc.TotalAmount)
-	//	log.Println(b.Doc.VendorId)
-	//	log.Println("--item detail--")
-	//	log.Println(b.Item[0].ItemId)
-	//	log.Println(b.Item[0].Price)
 
-	log.Println(b.Item)
+//		log.Println(b.Doc.DocNo)
+//		log.Println(b.Doc.DocDate)
+//		log.Println(b.Doc.TotalAmount)
+//		log.Println(b.Doc.VendorId)
+//		log.Println("--item detail--")
+//		log.Println(b.Item[0].ItemId)
+//		log.Println(b.Item[0].Price)
+
+	//
+	log.Println("Delete Docno : " ,b.Docno)
 	result := m.Response{}
 
 	// call model.purchase.newbuy
-
-//	result = b.DeleteBuy()
+	by := m.BuyTrans{}
+	result = by.DeleteBuy(b.Docno)
 	log.Println(result)
 	c.JSON(200, result)
 }

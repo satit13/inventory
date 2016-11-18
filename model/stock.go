@@ -39,7 +39,7 @@ func (i *Stockprofile)GetAllStock()([]Stockprofile){
 	return rs
 }
 
-func (i *Stock)UpdateStock(itemid int64, locid int64, amount float32, doctype Doctype, qty float32, dbconn *sqlx.DB) {
+func (i *Stock)UpdateStock(doctype int,sc StockCard, dbconn *sqlx.DB) {
 	log.Println("< ------ Begin Stockcard.Update process")
 
 	//check existing record
@@ -48,7 +48,7 @@ func (i *Stock)UpdateStock(itemid int64, locid int64, amount float32, doctype Do
 	log.Println(sql)
 	st := []Stock{}
 
-	dbconn.Select(&st, sql, itemid, locid, )
+	dbconn.Select(&st, sql, sc.ItemId, sc.LocationId )
 
 	log.Printf("Check Existing Data : %v Record ", len(st))
 	//log.Printf("Exists data id : %v",st[1].Id)
@@ -56,46 +56,58 @@ func (i *Stock)UpdateStock(itemid int64, locid int64, amount float32, doctype Do
 
 		sql = `insert into stock (itemid,locationid) values (?,?)`
 		log.Println(sql)
-		_, err := dbconn.Exec(sql, itemid, locid, )
+		_, err := dbconn.Exec(sql,sc.ItemId, sc.LocationId )
 		if err != nil {
 			println("Exec err:", err.Error())
 		}
 	}
 
+	println("IsCancel : ",sc.Iscancel)
+	println("Doctype  : ",sc.DocType)
 
-	// case PURCHASE
 
-//	switch {
-//	case doctype : PURCHASE:
-//		return c - '0'
-//	case 'a' <= c && c <= 'f':
-//		return c - 'a' + 10
-//	case 'A' <= c && c <= 'F':
-//		return c - 'A' + 10
-//	}
+	switch
+	{
+		case doctype == 1:
+			println("Doctype : ",sc.DocType)
+			if sc.Iscancel == 0	{
+					sql = `update stock set qty = qty+?,amount = amount+?  where itemid=? and locationid = ?`
+					log.Println(sql)
+					_, err := dbconn.Exec(sql,
+						sc.Qty,
+						sc.Amount,
+						sc.ItemId,
+						sc.LocationId,	)
+					if err != nil {
+						println("Exec err2:", err.Error())
+					}
+				}
+			// cancel
+			if sc.Iscancel == 1 {
+				sql = `update stock set qty = qty-?,amount = amount-?  where itemid=? and locationid = ?`
+				log.Println("BEGIN IS CANCEL = 1 , PURCHASE")
+				_, err := dbconn.Exec(sql,
+					sc.Qty,
+					sc.Amount,
+					sc.ItemId,
+					sc.LocationId,	)
+					if err != nil {
+						println("Exec err2:", err.Error())
+					}
+				}
+		}
 
-	sql = `update stock set qty = qty+?,amount = amount+?  where itemid=? and locationid = ?`
-	log.Println(sql)
-	_, err := dbconn.Exec(sql,
-		qty,
-		amount,
-		itemid,
-		locid,
-	)
 
-	if err != nil {
-		println("Exec err:", err.Error())
-	}
+
 
 	// update stock in item table
 	sql = `update item set qty = (select sum(qty) from stock where itemid = ?) ,
-			amount = (select sum(amount) from stock where itemid = ?)
-			where id=?;`
+			amount = (select sum(amount) from stock where itemid = ?)	where id=?`
 	log.Println(sql)
-	_, err = dbconn.Exec(sql,
-		itemid,
-		itemid,
-		itemid,
+	_, err := dbconn.Exec(sql,
+		sc.ItemId,
+		sc.ItemId,
+		sc.ItemId,
 	)
 
 	if err != nil {

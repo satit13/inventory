@@ -100,44 +100,65 @@ func (b *BuyTrans)NewDetail( dbconn *sqlx.DB) {
 		}
 		// call update stock
 		stc := Stock{}
-		stc.UpdateStock(b.Item[k].ItemId, b.Item[k].LocationId, b.Item[k].Amount, PURCHASE, b.Item[k].Qty, dbconn)
+		sc :=b.Item[k]
+		stc.UpdateStock(1,sc, dbconn)
 
 	}
 }
 
 
-//func (b *BuyTrans)DeleteBuy()(Response){
-//	log.Println("Model Purchase Delete Start")
-//	r := Response{}
-//	r.Code = 200
-//	r.Message = "SUCCESS"
-//
-//	dbconn := Connectdb()
-//
-//	// Cancel Header of Buy trans
-//	sql := `Update buy set iscancel=1 where docid = ?`
-//	_, err := dbconn.Exec(sql,b.Doc.Id)
-//	if err != nil {
-//		println("Exec err:", err.Error())
-//		r.Message=(err)
-//
-//	}
-//
-//
-//	// Cancel Detail of Buy item Loop for each item - Decrease Stock (-)
-//	stkcard := []StockCard{}
-//	sql = `select * from stockcard where docid =?`
-//	 err = dbconn.Select(&stkcard,sql,b.Doc.Id)
-//
-//	if err != nil {
-//		println("Exec err:", err.Error())
-//		r.Message=(err)
-//
-//	}
-//
-//	// loop for cancel & Update stock
-//
-//
-//
-//	return r
-//}
+func (b *BuyTrans)DeleteBuy(docno string)(Response){
+	log.Println("Model Purchase Delete Start")
+	log.Println(docno)
+	r := Response{}
+	r.Code = 200
+	r.Message = "SUCCESS"
+
+	dbconn := Connectdb()
+
+	// Cancel Header of Buy trans
+	sql := `Update buy set iscancel=1 where docno = ?`
+	println(sql)
+	_, err := dbconn.Exec(sql,docno)
+	if err != nil {
+		println("Exec err1:", err.Error())
+		r.Message=(err.Error())
+
+	}
+
+	sql = `Update item.stockcard set iscancel=1 where docid in (select id from buy where docno = ?);`
+	println(sql)
+	_, err = dbconn.Exec(sql,docno)
+	if err != nil {
+		println("Exec err2:", err.Error())
+		r.Message=(err.Error())
+
+	}
+
+	// Cancel Detail of Buy item Loop for each item - Decrease Stock (-)
+	stkcard := []StockCard{}
+	sql = `select * from stockcard where docid in (select id from buy where docno = ?)`
+	err = dbconn.Select(&stkcard,sql,docno)
+	if err != nil {
+		println("Exec err3:", err.Error())
+		r.Message=(err.Error())
+
+	}
+	//println(stkcard[0].DocId)
+	// loop for cancel & Update stock
+	println("begin range loop")
+	for k, _ := range stkcard {
+
+		// call update stock
+		stc := Stock{}
+		sc := stkcard[k]
+		println("Loop in ")
+
+		stc.UpdateStock(1,sc, dbconn)
+		println(sc.ItemId)
+
+	}
+
+
+	return r
+}

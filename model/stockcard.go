@@ -1,9 +1,10 @@
 package model
+import "time"
 //import "log"
 
 type StockCard struct {
 	Id         int
-	DocType    int64
+	DocType    int
 	DocId      int64
 	ItemId     int64
 	Qty        float32
@@ -14,6 +15,7 @@ type StockCard struct {
 	TaxAmount  float32
 	Amount     float32
 	Iscancel   int
+	Docdate	   time.Time
 	//Row 	  []row
 }
 
